@@ -1,41 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title> Rock Paper Scissors game</title>
-  
-  
-  
-      <link rel="stylesheet" href="css/style.css">
+   <meta charset="UTF-8">
+   <title> Rock Paper Scissors game</title>
 
-  
+
+
+   <link rel="stylesheet" href="css/style.css">
+
+
 </head>
 
 <body>
 
    <div>
-     <h2>Player move</h2>
-  </div>
-   <div>
-      <button id="rock" disabled >Rock</button>
+      <h2>Player move</h2>
    </div>
    <div>
-      <button id="paper" disabled >Paper</button>
+      <button id="rock" class='player-move' disabled data-move="rock">Rock</button>
    </div>
    <div>
-      <button id="scissors" disabled >Scissors</button>
+      <button id="paper" class='player-move' disabled data-move="paper">Paper</button>
+   </div>
+   <div>
+      <button id="scissors" class='player-move' disabled data-move="scissors">Scissors</button>
    </div>
    <div>
       <button id="new">New</button>
    </div>
    <div id="output2"></div>
-   <div id="output"></div>
-<div id="result"></div>
-  
-  
+   <!--   <div id="output"></div>-->
+   <div id="result"></div>
 
-    <script  src="js/index.js"></script>
+
+   <!--modal-->
+
+   <div class="overlay" id="modal-overlay">
+      <div class="modal" id="modal-one">
+         <a href="#" class="close">x</a>
+         <header>Score</header>
+         <div class="content">
+            <table>
+               <thead>
+                  <tr>
+                     <th>Round</th>
+                     <th>Player Choice</th>
+                     <th>Computer Choice</th>
+                  </tr>
+               </thead>
+               <tbody id='tbody'></tbody>
+            </table>
+            <div id="output"></div>
+         </div>
+      </div>
+   </div>
+   <!--
+      <div class="modal" id="modal-two">
+         <a href="#" class="close">x</a>
+         <header>Modal two</header>
+         <div class="content">
+            <p>Dolor sit amet!</p>
+         </div>
+      </div>
+      <div class="modal" id="modal-three">
+         <a href="#" class="close">x</a>
+         <header>Modal three</header>
+         <div class="content">
+            <p>Dolor sit amet!</p>
+         </div>
+      </div>
+-->
+   </div>
+
+
+
+   <script src="js/index.js"></script>
 
 
 

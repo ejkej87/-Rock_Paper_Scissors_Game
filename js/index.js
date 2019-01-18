@@ -3,9 +3,16 @@ var rock = document.getElementById('rock');
 var paper = document.getElementById('paper');
 var scissors = document.getElementById('scissors');
 var newButton = document.getElementById('new');
-var rounds;
-var playerWins;
-var computerWins;
+//var rounds;
+//var playerWins;
+//var computerWins;
+
+var params = {
+   rounds:0,
+   playerWins:0,
+   computerWins:0,
+   progress : [],
+};
 
 function checkButton(state) {
    rock.disabled = state;
@@ -20,22 +27,22 @@ newButton.addEventListener('click', function () {
 
    resetGame();
 
-   rounds = window.prompt('Ile rund?');
-   output2.innerHTML = 'Round number: ' + rounds;
+   params.rounds = window.prompt('Ile rund?');
+   output2.innerHTML = 'Round number: ' + params.rounds;
 
 });
 
-rock.addEventListener('click', function () {
-   playerMove("rock");
-});
-
-scissors.addEventListener('click', function () {
-   playerMove("scissors");
-});
-
-paper.addEventListener('click', function () {
-   playerMove("paper");
-});
+//rock.addEventListener('click', function () {
+//   playerMove("rock");
+//});
+//
+//scissors.addEventListener('click', function () {
+//   playerMove("scissors");
+//});
+//
+//paper.addEventListener('click', function () {
+//   playerMove("paper");
+//});
 
 function playerMove(userChoice) {
    var computerChoice = Math.floor((Math.random() * 3) + 1);
@@ -47,6 +54,16 @@ function playerMove(userChoice) {
    } else {
       computerChoice = 'scissors';
    }
+   
+   var score = {
+      comChoice : computerChoice,
+      plChoice : userChoice,
+   }
+   
+   params.progress.push(score);
+   
+//   console.log(score);
+   console.log(params.progress);
 
    compare(userChoice, computerChoice);
 }
@@ -60,10 +77,10 @@ function compare(userChoice, computerChoice) {
       (userChoice === 'scissors' && computerChoice === 'paper') ||
       (userChoice === 'paper' && computerChoice === 'rock')
    ) {
-      playerWins++;
+      params.playerWins++;
       output.innerHTML = 'YOU WON: you played ' + userChoice + ', computer played ' + computerChoice;
    } else {
-      computerWins++;
+      params.computerWins++;
       output.innerHTML = 'YOU LOSE: you played ' + userChoice + ', computer played ' + computerChoice;
    }
 
@@ -72,9 +89,9 @@ function compare(userChoice, computerChoice) {
 }
 
 function resetGame() {
-   rounds = 0;
-   playerWins = 0;
-   computerWins = 0;
+   params.rounds = 0;
+   params.playerWins = 0;
+   params.computerWins = 0;
 
   checkButton(false);
 
@@ -82,17 +99,53 @@ function resetGame() {
 
 function checkEnd() {
   
-   if (playerWins == rounds) {
+   if (params.playerWins == params.rounds) {
+      document.getElementById('modal-overlay').classList.add('show');
+      document.getElementById('modal-one').classList.add('show');
       output.innerHTML = 'YOU WON THE ENTIRE GAME!!!';
+      for( var i = 0; i<params.progress.length; i++){
+         document.getElementById('tbody').innerHTML += '<tr><td>' + (i+1) + '</td><td>' + params.progress[i].plChoice + '</td><td>' + params.progress[i].comChoice + '</td></tr>';    
+      }
      checkButton(true);
-   } else if (computerWins == rounds) {
+   } else if (params.computerWins == params.rounds) {
+      document.getElementById('modal-overlay').classList.add('show');
+      document.getElementById('modal-one').classList.add('show');
       output.innerHTML = 'YOU LOSE THE ENTIRE GAME!!!';
+      for( var i = 0; i<params.progress.length; i++){
+         document.getElementById('tbody').innerHTML += '<tr><td>' + (i+1) + '</td><td>' + params.progress[i].plChoice + '</td><td>' + params.progress[i].comChoice + '</td></tr>';    
+      }
      checkButton(true);
   }  
 }
 
+var hideModal = function(event){
+   event.preventDefault();
+   document.querySelector('#modal-overlay').classList.remove('show');
+   document.querySelector('#modal-one').classList.remove('show'); 
+};
+
+var hideOverlay = function(event){
+   event.preventDefault();
+   document.querySelector('#modal-overlay').classList.remove('show');
+   document.querySelector('#modal-one').classList.remove('show'); 
+};
+
+document.getElementById('modal-overlay').addEventListener('click', hideOverlay);
+
+var closeButtons = document.querySelectorAll('.modal .close');
+
+for(var i = 0; i < closeButtons.length; i++){
+   closeButtons[i].addEventListener('click', hideModal);
+}
+
 
 function setScore() {
-   document.getElementById('result').innerHTML = 'Player score: ' + playerWins + ' vs ' +
-      'Computer score: ' + computerWins;
+   document.getElementById('result').innerHTML = 'Player score: ' + params.playerWins + ' vs ' +
+      'Computer score: ' + params.computerWins;
 }
+
+document.querySelectorAll('.player-move').forEach(function(element, index) {
+   element.addEventListener('click', function() {
+      this.addEventListener('click', playerMove(this.getAttribute('data-move')));
+   });
+})
