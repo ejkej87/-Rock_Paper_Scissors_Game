@@ -8,10 +8,10 @@ var newButton = document.getElementById('new');
 //var computerWins;
 
 var params = {
-   rounds:0,
-   playerWins:0,
-   computerWins:0,
-   progress : [],
+   rounds: 0,
+   playerWins: 0,
+   computerWins: 0,
+   progress: [],
 };
 
 function checkButton(state) {
@@ -23,7 +23,7 @@ function checkButton(state) {
 
 
 newButton.addEventListener('click', function () {
-   
+
 
    resetGame();
 
@@ -54,24 +54,19 @@ function playerMove(userChoice) {
    } else {
       computerChoice = 'scissors';
    }
-   
-   var score = {
-      comChoice : computerChoice,
-      plChoice : userChoice,
-   }
-   
-   params.progress.push(score);
-   
-//   console.log(score);
-   console.log(params.progress);
+
+
 
    compare(userChoice, computerChoice);
 }
 
 function compare(userChoice, computerChoice) {
 
+   var winner;
+
    if (userChoice === computerChoice) {
       output.innerHTML = 'The result is tie!';
+      winner = 'tie';
    } else if (
       (userChoice === 'rock' && computerChoice === 'scissors') ||
       (userChoice === 'scissors' && computerChoice === 'paper') ||
@@ -79,10 +74,25 @@ function compare(userChoice, computerChoice) {
    ) {
       params.playerWins++;
       output.innerHTML = 'YOU WON: you played ' + userChoice + ', computer played ' + computerChoice;
+      winner = 'player';
+
    } else {
       params.computerWins++;
       output.innerHTML = 'YOU LOSE: you played ' + userChoice + ', computer played ' + computerChoice;
+      winner = 'computer';
    }
+
+   var score = {
+      comChoice: computerChoice,
+      plChoice: userChoice,
+      winner: winner,
+      points: params.playerWins + ':' + params.computerWins,
+   }
+
+   params.progress.push(score);
+
+   //   console.log(score);
+   console.log(params.progress);
 
    checkEnd();
    setScore();
@@ -93,48 +103,50 @@ function resetGame() {
    params.playerWins = 0;
    params.computerWins = 0;
 
-  checkButton(false);
+   checkButton(false);
 
 }
 
 function checkEnd() {
-  
+
    if (params.playerWins == params.rounds) {
       document.getElementById('modal-overlay').classList.add('show');
       document.getElementById('modal-one').classList.add('show');
       output.innerHTML = 'YOU WON THE ENTIRE GAME!!!';
-      for( var i = 0; i<params.progress.length; i++){
-         document.getElementById('tbody').innerHTML += '<tr><td>' + (i+1) + '</td><td>' + params.progress[i].plChoice + '</td><td>' + params.progress[i].comChoice + '</td></tr>';    
-      }
-     checkButton(true);
+
    } else if (params.computerWins == params.rounds) {
       document.getElementById('modal-overlay').classList.add('show');
       document.getElementById('modal-one').classList.add('show');
       output.innerHTML = 'YOU LOSE THE ENTIRE GAME!!!';
-      for( var i = 0; i<params.progress.length; i++){
-         document.getElementById('tbody').innerHTML += '<tr><td>' + (i+1) + '</td><td>' + params.progress[i].plChoice + '</td><td>' + params.progress[i].comChoice + '</td></tr>';    
+
+   }
+
+   if (params.playerWins == params.rounds || params.computerWins == params.rounds) {
+      for (var i = 0; i < params.progress.length; i++) {
+         document.getElementById('tbody').innerHTML += '<tr><td>' + (i + 1) + '</td><td>' + params.progress[i].plChoice + '</td><td>' + params.progress[i].comChoice + '</td><td>' + params.progress[i].winner + '</td><td>' + params.progress[i].points + '</td></tr>';
       }
-     checkButton(true);
-  }  
+      checkButton(true);
+   }
+
 }
 
-var hideModal = function(event){
+var hideModal = function (event) {
    event.preventDefault();
    document.querySelector('#modal-overlay').classList.remove('show');
-   document.querySelector('#modal-one').classList.remove('show'); 
+   document.querySelector('#modal-one').classList.remove('show');
 };
 
-var hideOverlay = function(event){
+var hideOverlay = function (event) {
    event.preventDefault();
    document.querySelector('#modal-overlay').classList.remove('show');
-   document.querySelector('#modal-one').classList.remove('show'); 
+   document.querySelector('#modal-one').classList.remove('show');
 };
 
 document.getElementById('modal-overlay').addEventListener('click', hideOverlay);
 
 var closeButtons = document.querySelectorAll('.modal .close');
 
-for(var i = 0; i < closeButtons.length; i++){
+for (var i = 0; i < closeButtons.length; i++) {
    closeButtons[i].addEventListener('click', hideModal);
 }
 
@@ -144,8 +156,8 @@ function setScore() {
       'Computer score: ' + params.computerWins;
 }
 
-document.querySelectorAll('.player-move').forEach(function(element, index) {
-   element.addEventListener('click', function() {
+document.querySelectorAll('.player-move').forEach(function (element, index) {
+   element.addEventListener('click', function () {
       this.addEventListener('click', playerMove(this.getAttribute('data-move')));
    });
 })

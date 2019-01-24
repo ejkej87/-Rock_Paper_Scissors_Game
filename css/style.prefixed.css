@@ -21,6 +21,7 @@ button {
    background-color: #02ac46;
    border: 2px solid #02ac46;
    border-radius: 4px;
+   -webkit-transition: color .3s, background-color .3s;
    transition: color .3s, background-color .3s;
    cursor: pointer;
    outline: 0 !important;
@@ -37,6 +38,10 @@ button:hover,
 button:active {
    color: #02ac46;
    background-color: #fff;
+}
+
+button:disabled {
+   opacity: 0.7;
 }
 
 #output,
@@ -62,10 +67,11 @@ button:active {
 .modal {
    display: none;
    background: #fff;
-   width: 200px;
+   width: 500px;
    position: absolute;
    top: 50%;
    left: 50%;
+   -webkit-transform: translate3d(-50%, -50%, 0);
    transform: translate3d(-50%, -50%, 0);
 }
 
